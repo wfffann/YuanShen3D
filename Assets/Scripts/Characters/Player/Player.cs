@@ -14,11 +14,13 @@ namespace YuanShenImpactMovementSystem
 
         //组件
         public Rigidbody rb {  get; private set; }
+        public Transform mainCameraTransform { get; private set; }
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
             input = GetComponent<PlayerInput>();
+            mainCameraTransform = Camera.main.transform;
 
             movementStateMachine = new PlayerMovementStateMachine(this);//伴随他的构造函数
         }
