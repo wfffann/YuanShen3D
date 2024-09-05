@@ -11,6 +11,10 @@ namespace YuanShenImpactMovementSystem
         [field: Header("References")]
         [field: SerializeField] public PlayerSO playerData {  get; private set; }
 
+        [field: Header("Collisions")]
+        [field: SerializeField] public CapsulColliderUtility colliderUtility { get; private set; }
+        [field: SerializeField] public PlayerLayerData layerData { get; private set; }
+
         //脚本
         public PlayerInput input {  get; private set; }
 
@@ -24,9 +28,25 @@ namespace YuanShenImpactMovementSystem
         {
             rb = GetComponent<Rigidbody>();
             input = GetComponent<PlayerInput>();
+
+            //碰撞体初始化数据
+            colliderUtility.Initialize(gameObject);
+
+            //获取当前碰撞体的数据
+            colliderUtility.CalculateCapsuleColliderDimensions();
+
             mainCameraTransform = Camera.main.transform;
 
             movementStateMachine = new PlayerMovementStateMachine(this);//伴随他的构造函数
+        }
+
+        private void OnValidate()
+        {
+            //碰撞体初始化数据
+            colliderUtility.Initialize(gameObject);
+
+            //获取当前碰撞体的数据
+            colliderUtility.CalculateCapsuleColliderDimensions();
         }
 
         private void Start()

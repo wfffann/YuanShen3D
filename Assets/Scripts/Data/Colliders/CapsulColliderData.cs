@@ -8,7 +8,7 @@ namespace YuanShenImpactMovementSystem
     {
         public CapsuleCollider collider { get; private set; }
 
-        public Vector3 colliderCenterInLocalSpace {  get; private set; }
+        public Vector3 colliderCenterInLocalSpace {  get; private set; }//碰撞体的中心
 
         /// <summary>
         /// 碰撞体初始化

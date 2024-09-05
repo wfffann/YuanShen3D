@@ -185,7 +185,9 @@ namespace YuanShenImpactMovementSystem
         /// <returns></returns>
         protected float GetMovementSpeed()
         {
-            return playerGroundedMovementData.BaseSpeed * playerMovementStateMachine.playerStateReusableData.movementSpeedModifier;
+            return playerGroundedMovementData.BaseSpeed * 
+                playerMovementStateMachine.playerStateReusableData.movementSpeedModifier * 
+                playerMovementStateMachine.playerStateReusableData.movementOnSlopeSpeedModifier;
         }
 
         /// <summary>
@@ -200,6 +202,15 @@ namespace YuanShenImpactMovementSystem
             playerHorizontalVelocity.y = 0f;
 
             return playerHorizontalVelocity;
+        }
+
+        /// <summary>
+        /// 获取Player的垂直速度
+        /// </summary>
+        /// <returns></returns>
+        protected Vector3 GetPlayerVerticalVelocity()
+        {
+            return new Vector3(0f, playerMovementStateMachine.player.rb.velocity.y, 0f);
         }
 
         /// <summary>
