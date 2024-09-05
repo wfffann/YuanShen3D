@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace YuanShenImpactMovementSystem
 {
-    public class PlayerSprintingState : PlayerMovementState
+    public class PlayerSprintingState : PlayerMovingState
     {
         public PlayerSprintingState(PlayerMovementStateMachine _playerMovementStateMachine) : base(_playerMovementStateMachine)
         {

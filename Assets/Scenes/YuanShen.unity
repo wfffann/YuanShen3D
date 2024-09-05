@@ -2270,7 +2270,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00000008837882, y: -0.000000098178795, z: -8.676926e-15, w: 1}
-  m_LocalPosition: {x: 0, y: 1.4, z: -5.999822}
+  m_LocalPosition: {x: 0, y: 1.4, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4790,7 +4790,7 @@ Transform:
   m_GameObject: {fileID: 1239033597}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00000008837882, y: -0.000000098178795, z: -2.3444274e-10, w: 1}
-  m_LocalPosition: {x: 0, y: 1.4, z: -5.999822}
+  m_LocalPosition: {x: 0, y: 1.4, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4962,7 +4962,7 @@ MonoBehaviour:
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_CameraDistance: 5.999822
+  m_CameraDistance: 6
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
@@ -5106,6 +5106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bd4e26898a51ab4f8472f2c41dca571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <playerData>k__BackingField: {fileID: 11400000, guid: fc79dba2e0f782043b0555d2742d8413, type: 2}
 --- !u!114 &1847196833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5152,7 +5153,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1847196830}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 6d51d9bc842b66f4b8003745a26625df, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

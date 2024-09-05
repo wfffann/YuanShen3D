@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace YuanShenImpactMovementSystem
 {
@@ -9,19 +10,13 @@ namespace YuanShenImpactMovementSystem
     {
         protected PlayerMovementStateMachine playerMovementStateMachine;
 
-        protected Vector2 movementInput;
-
-        protected float baseSpeed = 5f;
-        protected float speedModifier = 1f;//速度修改器
-
-        protected Vector3 currentTargetRotation;//目标旋转角度
-        protected Vector3 timeToReachTargetRotation;//角度平滑方法调用需要的时间
-        protected Vector3 dampedTargetRotationCurrentVelocity;
-        protected Vector3 dampedTargetRotationPassedTime;
+        protected PlayerGroundedData playerGroundedMovementData;
 
         public PlayerMovementState(PlayerMovementStateMachine _playerMovementStateMachine)
         {
             playerMovementStateMachine = _playerMovementStateMachine;
+
+            playerGroundedMovementData = playerMovementStateMachine.player.playerData.playerGroundedData;
 
             InitializaData();
         }
@@ -32,18 +27,20 @@ namespace YuanShenImpactMovementSystem
         private void InitializaData()
         {
             //角度平滑方法调用需要的时间
-            timeToReachTargetRotation.y = 0.14f;
+            playerMovementStateMachine.playerStateReusableData.TimeToReachTargetRotation = playerGroundedMovementData.baseRotationData.targetRotationReachTime;
         }
 
         #region IState 接口的实现方法
         public virtual void Enter()
         {
             Debug.Log("State: " + GetType().Name);
+
+            AddInputActionsCallback();
         }
 
         public virtual void Exit()
         {
-            
+            RemoveInputActionsCallback();
         }
 
         public virtual void HandleInput()
@@ -53,6 +50,7 @@ namespace YuanShenImpactMovementSystem
 
         public virtual void PhysicsUpdate()
         {
+            //移动
             Move();
         }
 
@@ -60,15 +58,17 @@ namespace YuanShenImpactMovementSystem
         {
             
         }
+
         #endregion
 
         #region 主要方法
+
         /// <summary>
         /// 读取移动输入
         /// </summary>
         private void ReadMovementInput()
         {
-            movementInput = playerMovementStateMachine.player.input.playerActions.Movement.ReadValue<Vector2>();   
+            playerMovementStateMachine.playerStateReusableData.movementInput = playerMovementStateMachine.player.input.playerActions.Movement.ReadValue<Vector2>();   
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace YuanShenImpactMovementSystem
         /// </summary>
         private void Move()
         {
-            if(movementInput == Vector2.zero || speedModifier == 0f)
+            if(playerMovementStateMachine.playerStateReusableData.movementInput == Vector2.zero || playerMovementStateMachine.playerStateReusableData.movementSpeedModifier == 0f)
             {
                 return;
             }
@@ -161,20 +161,22 @@ namespace YuanShenImpactMovementSystem
         /// <param name="targetAngle"></param>
         private void UpdateTargetRotationData(float targetAngle)
         {
-            currentTargetRotation.y = targetAngle;
+            playerMovementStateMachine.playerStateReusableData.CurrentTargetRotation.y = targetAngle;
 
-            dampedTargetRotationPassedTime.y = 0f;
+            playerMovementStateMachine.playerStateReusableData.DampedTargetRotationPassedTime.y = 0f;
         }
+
         #endregion
 
         #region 可重用方法
+
         /// <summary>
         /// 获取移动输入的向量
         /// </summary>
         /// <returns></returns>
         protected Vector3 GetMovementInputDirection()
         {
-            return new Vector3(movementInput.x, 0f, movementInput.y);
+            return new Vector3(playerMovementStateMachine.playerStateReusableData.movementInput.x, 0f, playerMovementStateMachine.playerStateReusableData.movementInput.y);
         }
 
         /// <summary>
@@ -183,7 +185,7 @@ namespace YuanShenImpactMovementSystem
         /// <returns></returns>
         protected float GetMovementSpeed()
         {
-            return baseSpeed * speedModifier;
+            return playerGroundedMovementData.BaseSpeed * playerMovementStateMachine.playerStateReusableData.movementSpeedModifier;
         }
 
         /// <summary>
@@ -209,18 +211,18 @@ namespace YuanShenImpactMovementSystem
             float currentYAngle = playerMovementStateMachine.player.rb.rotation.eulerAngles.y;
 
             //判断当前度数与目标度数
-            if(currentYAngle == currentTargetRotation.y)
+            if(currentYAngle == playerMovementStateMachine.playerStateReusableData.CurrentTargetRotation.y)
             {
                 return;
             }
 
             //平滑旋转
-            float smoothedYAngle = Mathf.SmoothDampAngle(currentYAngle, currentTargetRotation.y, 
-                ref dampedTargetRotationCurrentVelocity.y,
-                timeToReachTargetRotation.y - dampedTargetRotationPassedTime.y);
+            float smoothedYAngle = Mathf.SmoothDampAngle(currentYAngle, playerMovementStateMachine.playerStateReusableData.CurrentTargetRotation.y, 
+                ref playerMovementStateMachine.playerStateReusableData.DampedTargetRotationCurrentVelocity.y,
+                playerMovementStateMachine.playerStateReusableData.TimeToReachTargetRotation.y - playerMovementStateMachine.playerStateReusableData.DampedTargetRotationPassedTime.y);
 
             //不断减少调用平滑旋转的总时间
-            dampedTargetRotationPassedTime.y += Time.deltaTime;
+            playerMovementStateMachine.playerStateReusableData.DampedTargetRotationPassedTime.y += Time.deltaTime;
 
             //创建旋转四元数
             Quaternion targetRotation = Quaternion.Euler(0f, smoothedYAngle, 0f);
@@ -246,7 +248,7 @@ namespace YuanShenImpactMovementSystem
             }
             
             //判断上一帧目标旋转度数与当前一帧目标旋转度数是否相同
-            if (directionAngle != currentTargetRotation.y)
+            if (directionAngle != playerMovementStateMachine.playerStateReusableData.CurrentTargetRotation.y)
             {
                 //更新目标旋转度数
                 UpdateTargetRotationData(directionAngle);
@@ -265,6 +267,43 @@ namespace YuanShenImpactMovementSystem
         {
             return Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
         }
+
+        /// <summary>
+        /// 重置玩家的速度为 0
+        /// </summary>
+        protected void ResetVelocity()
+        {
+            playerMovementStateMachine.player.rb.velocity = Vector3.zero;
+        }
+
+        /// <summary>
+        /// 添加按下一次的操作回调
+        /// </summary>
+        protected virtual void AddInputActionsCallback()
+        {
+            playerMovementStateMachine.player.input.playerActions.WalkToggle.started += OnWalkToggleStarted;
+        }
+
+        /// <summary>
+        /// 删除按下一次的操作的回调
+        /// </summary>
+        protected virtual void RemoveInputActionsCallback()
+        {
+            playerMovementStateMachine.player.input.playerActions.WalkToggle.started -= OnWalkToggleStarted;
+        }
+
+        #endregion
+
+        #region Input Methods
+        /// <summary>
+        /// Walk行走状态的切换（值对调
+        /// </summary>
+        /// <param name="context"></param>
+        protected virtual void OnWalkToggleStarted(InputAction.CallbackContext context)
+        {
+            playerMovementStateMachine.playerStateReusableData.shouldWalk = !playerMovementStateMachine.playerStateReusableData.shouldWalk;
+        }
+
         #endregion
     }
 }

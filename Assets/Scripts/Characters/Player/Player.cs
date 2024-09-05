@@ -7,6 +7,10 @@ namespace YuanShenImpactMovementSystem
     [RequireComponent(typeof(PlayerInput))]//他会自动添加这个脚本
     public class Player : MonoBehaviour
     {
+        //Data
+        [field: Header("References")]
+        [field: SerializeField] public PlayerSO playerData {  get; private set; }
+
         //脚本
         public PlayerInput input {  get; private set; }
 

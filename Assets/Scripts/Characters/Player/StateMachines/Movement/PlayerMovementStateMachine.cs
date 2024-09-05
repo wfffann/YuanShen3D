@@ -6,6 +6,7 @@ namespace YuanShenImpactMovementSystem
 {
     public class PlayerMovementStateMachine : StateMachine
     {
+        public PlayerStateReusableData playerStateReusableData;
         public Player player { get;}
         public PlayerIdlingState idlingState { get; }
         public PlayerWalkingState walkingState { get; }
@@ -17,10 +18,11 @@ namespace YuanShenImpactMovementSystem
         /// </summary>
         public PlayerMovementStateMachine(Player _player)
         {
+            playerStateReusableData = new PlayerStateReusableData();
+
             player = _player;
 
             idlingState = new PlayerIdlingState(this);
-
             walkingState = new PlayerWalkingState(this);
             runningState = new PlayerRunningState(this);
             sprintingState = new PlayerSprintingState(this);

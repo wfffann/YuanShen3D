@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a96c422d73621c41b1415be24a24f43, type: 3}
+  m_Name: Player
+  m_EditorClassIdentifier: 
+  <playerGroundedData>k__BackingField:
+    <BaseSpeed>k__BackingField: 5
+    <baseRotationData>k__BackingField:
+      <targetRotationReachTime>k__BackingField: {x: 0, y: 0.14, z: 0}
+    <playerWalkData>k__BackingField:
+      <speedModifier>k__BackingField: 0.225
+    <playerRunningData>k__BackingField:
+      <speedModifier>k__BackingField: 1
