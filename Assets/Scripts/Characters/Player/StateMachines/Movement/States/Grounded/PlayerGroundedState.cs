@@ -54,7 +54,7 @@ namespace YuanShenImpactMovementSystem
                     return;
                 }
 
-                //获取碰撞体相对于世界坐标的center
+                //计算出悬浮的距离
                 float distanceToFloatingPoint = 
                     playerMovementStateMachine.player.colliderUtility.capsulColliderData.colliderCenterInLocalSpace.y *
                     playerMovementStateMachine.player.transform.localScale.y -  //如果缩放玩家比例
@@ -108,25 +108,44 @@ namespace YuanShenImpactMovementSystem
             playerMovementStateMachine.ChangeState(playerMovementStateMachine.runningState);
         }
 
+        //添加按键的回调
         protected override void AddInputActionsCallback()
         {
             base.AddInputActionsCallback();
 
             playerMovementStateMachine.player.input.playerActions.Movement.canceled += OnMovementCanceled;
+
+            playerMovementStateMachine.player.input.playerActions.Dash.started += OnDashStarted;
         }
 
+        //移除按键的回调
         protected override void RemoveInputActionsCallback()
         {
             base.RemoveInputActionsCallback();
 
             playerMovementStateMachine.player.input.playerActions.Movement.canceled -= OnMovementCanceled;
+
+            playerMovementStateMachine.player.input.playerActions.Dash.started -= OnDashStarted;
         }
         #endregion
 
         #region Input Methods
+        /// <summary>
+        /// 没有移动向量的输入
+        /// </summary>
+        /// <param name="context"></param>
         protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
         {
             playerMovementStateMachine.ChangeState(playerMovementStateMachine.idlingState);
+        }
+
+        /// <summary>
+        /// 触发一次冲刺
+        /// </summary>
+        /// <param name="context"></param>
+        protected virtual void OnDashStarted(InputAction.CallbackContext context)
+        {
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.dashState);
         }
         #endregion
     }

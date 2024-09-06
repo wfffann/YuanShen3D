@@ -33,5 +33,19 @@ namespace YuanShenImpactMovementSystem
         {
             currentState?.PhysicsUpdate();
         }
+
+        public void OnAnimationEnterEvent()
+        {
+            currentState?.OnAnimationEnterEvent();
+        }
+        public void OnAnimationExitEvent()
+        {
+            currentState?.OnAnimationExitEvent();
+        }
+
+        public void OnAnimationTransitionEvent()
+        {
+            currentState?.OnAnimationTransitionEvent();
+        }
     }
 }

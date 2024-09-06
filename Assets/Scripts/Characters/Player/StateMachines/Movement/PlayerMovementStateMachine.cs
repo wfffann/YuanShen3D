@@ -9,6 +9,7 @@ namespace YuanShenImpactMovementSystem
         public PlayerStateReusableData playerStateReusableData;
         public Player player { get;}
         public PlayerIdlingState idlingState { get; }
+        public PlayerDashingState dashState { get; }
         public PlayerWalkingState walkingState { get; }
         public PlayerRunningState runningState { get; }
         public PlayerSprintingState sprintingState { get; }
@@ -23,6 +24,7 @@ namespace YuanShenImpactMovementSystem
             player = _player;
 
             idlingState = new PlayerIdlingState(this);
+            dashState = new PlayerDashingState(this);
             walkingState = new PlayerWalkingState(this);
             runningState = new PlayerRunningState(this);
             sprintingState = new PlayerSprintingState(this);

@@ -59,9 +59,24 @@ namespace YuanShenImpactMovementSystem
             
         }
 
+        public virtual void OnAnimationEnterEvent()
+        {
+            
+        }
+
+        public virtual void OnAnimationExitEvent()
+        {
+            
+        }
+
+        public virtual void OnAnimationTransitionEvent()
+        {
+            
+        }
+
         #endregion
 
-        #region 主要方法
+        #region Main Methods
 
         /// <summary>
         /// 读取移动输入
@@ -168,7 +183,7 @@ namespace YuanShenImpactMovementSystem
 
         #endregion
 
-        #region 可重用方法
+        #region Reusable Methods
 
         /// <summary>
         /// 获取移动输入的向量
@@ -314,6 +329,8 @@ namespace YuanShenImpactMovementSystem
         {
             playerMovementStateMachine.playerStateReusableData.shouldWalk = !playerMovementStateMachine.playerStateReusableData.shouldWalk;
         }
+
+
 
         #endregion
     }
