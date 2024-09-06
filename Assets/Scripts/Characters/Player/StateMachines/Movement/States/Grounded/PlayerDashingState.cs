@@ -117,7 +117,7 @@ namespace YuanShenImpactMovementSystem
 
         protected override void OnDashStarted(InputAction.CallbackContext context)
         {
-            base.OnDashStarted(context);
+            //base.OnDashStarted(context);
         }
         #endregion
     }
