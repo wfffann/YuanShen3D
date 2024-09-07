@@ -13,6 +13,9 @@ namespace YuanShenImpactMovementSystem
         private float startTime;
 
         private int consecutiveDashesUsed;//连续按下次数
+
+        private bool shouldKeepRotating;
+
         public PlayerDashingState(PlayerMovementStateMachine _playerMovementStateMachine) : base(_playerMovementStateMachine)
         {
             playerDashData = playerGroundedMovementData.playerDashData;
@@ -26,13 +29,38 @@ namespace YuanShenImpactMovementSystem
             //速度修改器
             playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = playerGroundedMovementData.playerDashData.speedModifier;
 
+            playerMovementStateMachine.playerStateReusableData.RotationData = playerDashData.rotationData;
+
             AddForceOnTransitionFromStationaryState();
+
+            //进入Dashing冲刺状态时是否有移动输入
+            shouldKeepRotating = playerMovementStateMachine.playerStateReusableData.movementInput != Vector2.zero;
             
             //进入这个状态就会增加按下次数
             UpdateConsecutiveDashes();
 
             //记录第一次按下的时间
             startTime = Time.time;
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            SetBaseRotationData();
+        }
+
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+
+            if (!shouldKeepRotating)
+            {
+                return;
+            }
+
+            //人物旋转
+            RotateTowardsTagetRotation();
         }
 
         /// <summary>
@@ -54,6 +82,9 @@ namespace YuanShenImpactMovementSystem
         #endregion
 
         #region Main Methods
+        /// <summary>
+        /// 冲刺状态增加的速度
+        /// </summary>
         private void AddForceOnTransitionFromStationaryState()
         {
             //如果此时有移动的输入
@@ -66,7 +97,10 @@ namespace YuanShenImpactMovementSystem
 
             characterRotationDirection.y = 0f;
 
-            //获取当前的移动速度
+            //在旋转的时候冲刺，那么会在进入的时候（没有移动输入）旋转到其他正前方的朝向(不考虑相机的移动角度
+            UpdateTargetRotation(characterRotationDirection, false);
+
+            //冲刺时的移动速度
             playerMovementStateMachine.player.rb.velocity = characterRotationDirection * GetMovementSpeed();
         }
 
@@ -106,7 +140,28 @@ namespace YuanShenImpactMovementSystem
         }
         #endregion
 
+        #region Reusable Methods
+        protected override void AddInputActionsCallback()
+        {
+            base.AddInputActionsCallback();
+
+            playerMovementStateMachine.player.input.playerActions.Movement.performed += OnMovementPerformed;
+        }
+
+        protected override void RemoveInputActionsCallback()
+        {
+            base.RemoveInputActionsCallback();
+
+            playerMovementStateMachine.player.input.playerActions.Movement.performed -= OnMovementPerformed;
+        }
+        #endregion
+
         #region Input Methods
+        private void OnMovementPerformed(InputAction.CallbackContext context)
+        {
+            shouldKeepRotating = true;
+        }
+
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
             //此函数已被清空，目的是防止在冲刺状态下没有移动速度立马变为IdleState

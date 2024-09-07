@@ -89,3 +89,18 @@ MonoBehaviour:
       <speedModifier>k__BackingField: 0.225
     <playerRunningData>k__BackingField:
       <speedModifier>k__BackingField: 1
+    <playerDashData>k__BackingField:
+      <speedModifier>k__BackingField: 2
+      <rotationData>k__BackingField:
+        <targetRotationReachTime>k__BackingField: {x: 0, y: 0.02, z: 0}
+      <timeToBeConsideredConsecutive>k__BackingField: 1
+      <consecutiveDashesLimitAmount>k__BackingField: 2
+      <dashLimitReachedCooldown>k__BackingField: 1.75
+    <playerSprintData>k__BackingField:
+      <speedModifier>k__BackingField: 1.7
+      <sprintToRunTime>k__BackingField: 1
+      <runToWalkTime>k__BackingField: 0.5
+    <playerStoppingData>k__BackingField:
+      <lightDecelerationForce>k__BackingField: 5
+      <mediumDecelerationForce>k__BackingField: 6.5
+      <hardDecelerationForce>k__BackingField: 8

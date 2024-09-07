@@ -8,6 +8,7 @@ namespace YuanShenImpactMovementSystem
     [Serializable]
     public class PlayerStateReusableData
     {
+        public PlayerRotationData RotationData { get; set; }
         public Vector2 movementInput { get; set; }
         public float movementSpeedModifier { get; set; } = 1f;
         public float movementOnSlopeSpeedModifier { get; set; } = 1f;
@@ -50,5 +51,7 @@ namespace YuanShenImpactMovementSystem
                 return ref dampedTargetRotationPassedTime;
             }
         }
+
+
     }
 }

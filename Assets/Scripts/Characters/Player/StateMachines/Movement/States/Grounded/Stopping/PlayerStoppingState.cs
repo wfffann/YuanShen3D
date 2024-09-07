@@ -25,6 +25,9 @@ namespace YuanShenImpactMovementSystem
         {
             base.PhysicsUpdate();
 
+            //使用旋转人物
+            RotateTowardsTagetRotation();
+
             //水平速度是否大于0.1f
             if (!IsMovingHorizontally())
             {

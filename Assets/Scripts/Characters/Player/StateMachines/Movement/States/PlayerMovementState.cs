@@ -26,8 +26,7 @@ namespace YuanShenImpactMovementSystem
         /// </summary>
         private void InitializaData()
         {
-            //角度平滑方法调用需要的时间
-            playerMovementStateMachine.playerStateReusableData.TimeToReachTargetRotation = playerGroundedMovementData.baseRotationData.targetRotationReachTime;
+            SetBaseRotationData();
         }
 
         #region IState 接口的实现方法
@@ -231,7 +230,7 @@ namespace YuanShenImpactMovementSystem
         /// <summary>
         /// 转向目标角度
         /// </summary>
-        private void RotateTowardsTagetRotation()
+        protected void RotateTowardsTagetRotation()
         {
             //获取人物Y轴当前的角度
             float currentYAngle = playerMovementStateMachine.player.rb.rotation.eulerAngles.y;
@@ -343,6 +342,18 @@ namespace YuanShenImpactMovementSystem
             Vector2 playerHorizontalMovement = new Vector2(playerHorizontalVelocity.x, playerHorizontalVelocity.y);
 
             return playerHorizontalMovement.magnitude > minimumMagnitude;
+        }
+
+        /// <summary>
+        /// 设置旋转的Data数据库以及设置调用旋转的时间
+        /// </summary>
+        protected void SetBaseRotationData()
+        {
+            playerMovementStateMachine.playerStateReusableData.RotationData = playerGroundedMovementData.baseRotationData;
+
+            //角度平滑方法调用需要的时间
+            playerMovementStateMachine.playerStateReusableData.TimeToReachTargetRotation =
+                playerMovementStateMachine.playerStateReusableData.RotationData.targetRotationReachTime;
         }
 
         #endregion
