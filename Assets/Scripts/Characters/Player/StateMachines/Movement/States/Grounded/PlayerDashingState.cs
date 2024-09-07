@@ -40,12 +40,10 @@ namespace YuanShenImpactMovementSystem
         /// </summary>
         public override void OnAnimationTransitionEvent()
         {
-            base.OnAnimationTransitionEvent();
-
             //如果没有移动输入
             if(playerMovementStateMachine.playerStateReusableData.movementInput == Vector2.zero)
             {
-                playerMovementStateMachine.ChangeState(playerMovementStateMachine.idlingState);
+                playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerHardStoppingState);
 
                 return;
             }

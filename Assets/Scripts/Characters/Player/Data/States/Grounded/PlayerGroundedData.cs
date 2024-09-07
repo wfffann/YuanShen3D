@@ -15,6 +15,6 @@ namespace YuanShenImpactMovementSystem
         [field: SerializeField] public PlayerRunningData playerRunningData { get; private set; }
         [field: SerializeField] public PlayerDashData playerDashData { get; private set; }
         [field: SerializeField] public PlayerSprintData playerSprintData { get; private set; }
-
+        [field: SerializeField] public PlayerStoppingData playerStoppingData { get; private set; }
     }
 }

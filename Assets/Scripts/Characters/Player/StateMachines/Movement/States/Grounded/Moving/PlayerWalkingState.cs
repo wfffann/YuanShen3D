@@ -24,6 +24,11 @@ namespace YuanShenImpactMovementSystem
         #endregion
 
         #region Input Methods
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerLightStoppingState);
+        }
+
         /// <summary>
         /// 行走Walk状态到Running状态的过渡
         /// </summary>

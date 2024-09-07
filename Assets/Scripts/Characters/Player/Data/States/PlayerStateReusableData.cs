@@ -11,6 +11,7 @@ namespace YuanShenImpactMovementSystem
         public Vector2 movementInput { get; set; }
         public float movementSpeedModifier { get; set; } = 1f;
         public float movementOnSlopeSpeedModifier { get; set; } = 1f;
+        public float movementDecelerationForce { get; set; } = 1f;
         public bool shouldWalk {  get; set; }
 
         private Vector3 currentTargetRotation;//目标旋转角度

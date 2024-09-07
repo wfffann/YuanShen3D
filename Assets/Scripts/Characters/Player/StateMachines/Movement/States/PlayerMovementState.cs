@@ -318,6 +318,33 @@ namespace YuanShenImpactMovementSystem
             playerMovementStateMachine.player.input.playerActions.WalkToggle.started -= OnWalkToggleStarted;
         }
 
+        /// <summary>
+        /// 水平方向的减速
+        /// </summary>
+        protected void DecelerateHorizontally()
+        {
+            Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
+
+            //与时间相关的ForceMode(v += F * dt
+            playerMovementStateMachine.player.rb.AddForce(-playerHorizontalVelocity * 
+                playerMovementStateMachine.playerStateReusableData.movementDecelerationForce, 
+                ForceMode.Acceleration);
+        }
+
+        /// <summary>
+        /// 判断是否在水平方向移动（具有0.1f的误差值
+        /// </summary>
+        /// <param name="minimumMagnitude"></param>
+        /// <returns></returns>
+        protected bool IsMovingHorizontally(float minimumMagnitude = 0.1f)
+        {
+            Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
+
+            Vector2 playerHorizontalMovement = new Vector2(playerHorizontalVelocity.x, playerHorizontalVelocity.y);
+
+            return playerHorizontalMovement.magnitude > minimumMagnitude;
+        }
+
         #endregion
 
         #region Input Methods

@@ -92,7 +92,7 @@ namespace YuanShenImpactMovementSystem
 
         #region  Reusable Methods
         /// <summary>
-        /// 玩家在移动时（有移动向量输入
+        /// 玩家在移动时（有移动向量输入(进入其他的移动状态
         /// </summary>
         protected virtual void OnMove()
         {
