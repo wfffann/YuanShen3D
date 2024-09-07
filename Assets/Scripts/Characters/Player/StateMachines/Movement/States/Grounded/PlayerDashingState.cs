@@ -27,7 +27,11 @@ namespace YuanShenImpactMovementSystem
             base.Enter();
 
             //ËÙ¶ÈÐÞ¸ÄÆ÷
-            playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = playerGroundedMovementData.playerDashData.speedModifier;
+            playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = 
+                playerGroundedMovementData.playerDashData.speedModifier;
+
+            playerMovementStateMachine.playerStateReusableData.currentJumpForce = 
+                playerAirborneData.playerJumpData.strongForce;
 
             playerMovementStateMachine.playerStateReusableData.RotationData = playerDashData.rotationData;
 

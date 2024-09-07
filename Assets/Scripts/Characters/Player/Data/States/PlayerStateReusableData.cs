@@ -52,6 +52,6 @@ namespace YuanShenImpactMovementSystem
             }
         }
 
-
+        public Vector3 currentJumpForce {  get; set; }
     }
 }

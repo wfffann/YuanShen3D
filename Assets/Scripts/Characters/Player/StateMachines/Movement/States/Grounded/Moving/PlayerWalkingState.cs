@@ -20,6 +20,8 @@ namespace YuanShenImpactMovementSystem
             base.Enter();
 
             playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = playerGroundedMovementData.playerWalkData.speedModifier;
+
+            playerMovementStateMachine.playerStateReusableData.currentJumpForce = playerAirborneData.playerJumpData.weakForce;
         }
         #endregion
 

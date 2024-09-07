@@ -116,6 +116,8 @@ namespace YuanShenImpactMovementSystem
             playerMovementStateMachine.player.input.playerActions.Movement.canceled += OnMovementCanceled;
 
             playerMovementStateMachine.player.input.playerActions.Dash.started += OnDashStarted;
+
+            playerMovementStateMachine.player.input.playerActions.Jump.started += OnJumpStarted;
         }
 
         //移除按键的回调
@@ -126,7 +128,10 @@ namespace YuanShenImpactMovementSystem
             playerMovementStateMachine.player.input.playerActions.Movement.canceled -= OnMovementCanceled;
 
             playerMovementStateMachine.player.input.playerActions.Dash.started -= OnDashStarted;
+
+            playerMovementStateMachine.player.input.playerActions.Jump.started -= OnJumpStarted;
         }
+
         #endregion
 
         #region Input Methods
@@ -146,6 +151,15 @@ namespace YuanShenImpactMovementSystem
         protected virtual void OnDashStarted(InputAction.CallbackContext context)
         {
             playerMovementStateMachine.ChangeState(playerMovementStateMachine.dashState);
+        }
+
+        /// <summary>
+        /// 触发一次跳跃
+        /// </summary>
+        /// <param name="context"></param>
+        private void OnJumpStarted(InputAction.CallbackContext context)
+        {
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerJumpState);
         }
         #endregion
     }

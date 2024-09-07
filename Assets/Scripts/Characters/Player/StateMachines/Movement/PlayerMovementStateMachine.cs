@@ -16,6 +16,7 @@ namespace YuanShenImpactMovementSystem
         public PlayerLightStoppingState playerLightStoppingState { get; }
         public PlayerMiddleStoppingState playerMiddleStoppingState { get; }
         public PlayerHardStoppingState playerHardStoppingState { get; }
+        public PlayerJumpState playerJumpState { get; }
 
         /// <summary>
         /// 构造函数(创建这个类实例时会创建里面的State实例
@@ -39,6 +40,9 @@ namespace YuanShenImpactMovementSystem
             playerLightStoppingState = new PlayerLightStoppingState(this);
             playerMiddleStoppingState = new PlayerMiddleStoppingState(this);
             playerHardStoppingState = new PlayerHardStoppingState(this);
+
+            //AirborneState
+            playerJumpState = new PlayerJumpState(this);
         }
     }
 }

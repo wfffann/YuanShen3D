@@ -27,6 +27,8 @@ namespace YuanShenImpactMovementSystem
             //修改速度调节器
             playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = playerSprintData.speedModifier;
 
+            playerMovementStateMachine.playerStateReusableData.currentJumpForce = playerAirborneData.playerJumpData.strongForce;
+           
             //记录当前时间
             startTime = Time.time;
         }

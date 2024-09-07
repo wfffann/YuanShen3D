@@ -12,11 +12,14 @@ namespace YuanShenImpactMovementSystem
 
         protected PlayerGroundedData playerGroundedMovementData;
 
+        protected PlayerAirborneData playerAirborneData;
+
         public PlayerMovementState(PlayerMovementStateMachine _playerMovementStateMachine)
         {
             playerMovementStateMachine = _playerMovementStateMachine;
 
             playerGroundedMovementData = playerMovementStateMachine.player.playerData.playerGroundedData;
+            playerAirborneData = playerMovementStateMachine.player.playerData.playerAirborneData;
 
             InitializaData();
         }

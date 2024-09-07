@@ -8,5 +8,7 @@ namespace YuanShenImpactMovementSystem
     public class PlayerSO : ScriptableObject
     {
         [field: SerializeField] public PlayerGroundedData playerGroundedData {  get; private set; }
+        [field: SerializeField] public PlayerAirborneData playerAirborneData {  get; private set; }
+
     }
 }
