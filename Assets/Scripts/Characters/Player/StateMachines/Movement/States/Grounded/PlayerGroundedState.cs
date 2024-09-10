@@ -16,6 +16,15 @@ namespace YuanShenImpactMovementSystem
         }
 
         #region IState Methods
+        public override void Enter()
+        {
+            base.Enter();
+
+            UpdateShouldSpringState();
+        }
+
+       
+
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
@@ -39,7 +48,7 @@ namespace YuanShenImpactMovementSystem
 
             //在胶囊碰撞体的Center向下放出射线
             if (Physics.Raycast(downwardsRayFromCapsuleCenter, out RaycastHit hit, slopeData.FloatRayDistance,
-                playerMovementStateMachine.player.layerData.groundLayer,
+                playerMovementStateMachine.player.playerLayerData.groundLayer,
                 QueryTriggerInteraction.Ignore))//忽略是groundLayer层的Trigger对象
             {
                 //计算法线与射线之间的角度
@@ -88,6 +97,26 @@ namespace YuanShenImpactMovementSystem
 
             return slopeSpeedModifier;
         }
+
+        /// <summary>
+        /// 使Player进入其他地面状态时，更新是否保持疾跑的状态
+        /// </summary>
+        private void UpdateShouldSpringState()
+        {
+            //是疾跑状态
+            if (!playerMovementStateMachine.playerStateReusableData.shouldSprint)
+            {
+                return;
+            }
+
+            //没有移动输入
+            if (playerMovementStateMachine.playerStateReusableData.movementInput != Vector2.zero)
+            {
+                return;
+            }
+
+            playerMovementStateMachine.playerStateReusableData.shouldSprint = false;
+        }
         #endregion
 
         #region  Reusable Methods
@@ -96,6 +125,14 @@ namespace YuanShenImpactMovementSystem
         /// </summary>
         protected virtual void OnMove()
         {
+            //如果是疾跑状态
+            if (playerMovementStateMachine.playerStateReusableData.shouldSprint)
+            {
+                playerMovementStateMachine.ChangeState(playerMovementStateMachine.sprintingState);
+
+                return;
+            }
+
             //如果按下walk键
             if (playerMovementStateMachine.playerStateReusableData.shouldWalk)
             {
@@ -157,7 +194,7 @@ namespace YuanShenImpactMovementSystem
         /// 触发一次跳跃
         /// </summary>
         /// <param name="context"></param>
-        private void OnJumpStarted(InputAction.CallbackContext context)
+        protected virtual void OnJumpStarted(InputAction.CallbackContext context)
         {
             playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerJumpState);
         }

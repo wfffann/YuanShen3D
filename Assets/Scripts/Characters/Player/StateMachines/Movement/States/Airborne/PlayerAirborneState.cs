@@ -10,5 +10,32 @@ namespace YuanShenImpactMovementSystem
         {
 
         }
+
+        #region IState Methods
+        public override void Enter()
+        {
+            base.Enter();
+
+            ResetSprintState();
+        }
+        #endregion
+
+
+        #region Reusable Methods
+        /// <summary>
+        /// 接触到地面后
+        /// </summary>
+        /// <param name="collider"></param>
+        protected override void OnContactWithGround(Collider collider)
+        {
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.idlingState);
+        }
+
+
+        protected virtual void ResetSprintState()
+        {
+            playerMovementStateMachine.playerStateReusableData.shouldSprint = false;
+        }
+        #endregion
     }
 }

@@ -76,6 +76,17 @@ namespace YuanShenImpactMovementSystem
             
         }
 
+
+        public virtual void OnTriggerEnter(Collider collider)
+        {
+            if (playerMovementStateMachine.player.playerLayerData.IsGroundLayer(collider.gameObject.layer))
+            {
+                OnContactWithGround(collider);
+
+                return;
+            }
+        }
+
         #endregion
 
         #region Main Methods
@@ -323,12 +334,25 @@ namespace YuanShenImpactMovementSystem
         /// <summary>
         /// 水平方向的减速
         /// </summary>
-        protected void DecelerateHorizontally()
+        protected void DecelerateHorizontallyVelocity()
         {
             Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
 
             //与时间相关的ForceMode(v += F * dt
             playerMovementStateMachine.player.rb.AddForce(-playerHorizontalVelocity * 
+                playerMovementStateMachine.playerStateReusableData.movementDecelerationForce, 
+                ForceMode.Acceleration);
+        }
+        
+        /// <summary>
+        /// 垂直方向的减速
+        /// </summary>
+        protected void DecelerateVerticalVelocity()
+        {
+            Vector3 playerVerticalVelocity = GetPlayerVerticalVelocity();
+
+            //与时间相关的ForceMode(v += F * dt
+            playerMovementStateMachine.player.rb.AddForce(-playerVerticalVelocity * 
                 playerMovementStateMachine.playerStateReusableData.movementDecelerationForce, 
                 ForceMode.Acceleration);
         }
@@ -348,6 +372,26 @@ namespace YuanShenImpactMovementSystem
         }
 
         /// <summary>
+        /// 判断人物是否在上升
+        /// </summary>
+        /// <param name="minimumVelocity"></param>
+        /// <returns></returns>
+        protected bool IsMovingUp(float minimumVelocity = 0.1f)
+        {
+            return GetPlayerVerticalVelocity().y > minimumVelocity;
+        }
+        
+        /// <summary>
+        /// 判断人物是否在下降
+        /// </summary>
+        /// <param name="minimumVelocity"></param>
+        /// <returns></returns>
+        protected bool IsMovingDown(float minimumVelocity = 0.1f)
+        {
+            return GetPlayerVerticalVelocity().y < -minimumVelocity;
+        }
+
+        /// <summary>
         /// 设置旋转的Data数据库以及设置调用旋转的时间
         /// </summary>
         protected void SetBaseRotationData()
@@ -357,6 +401,15 @@ namespace YuanShenImpactMovementSystem
             //角度平滑方法调用需要的时间
             playerMovementStateMachine.playerStateReusableData.TimeToReachTargetRotation =
                 playerMovementStateMachine.playerStateReusableData.RotationData.targetRotationReachTime;
+        }
+
+        /// <summary>
+        /// 接触到地面后
+        /// </summary>
+        /// <param name="collider"></param>
+        protected virtual void OnContactWithGround(Collider collider)
+        {
+            
         }
 
         #endregion
@@ -370,6 +423,7 @@ namespace YuanShenImpactMovementSystem
         {
             playerMovementStateMachine.playerStateReusableData.shouldWalk = !playerMovementStateMachine.playerStateReusableData.shouldWalk;
         }
+
 
 
 

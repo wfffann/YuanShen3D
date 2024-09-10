@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace YuanShenImpactMovementSystem
 
         [field: Header("Collisions")]
         [field: SerializeField] public CapsulColliderUtility colliderUtility { get; private set; }
-        [field: SerializeField] public PlayerLayerData layerData { get; private set; }
+        [field: SerializeField] public PlayerLayerData playerLayerData { get; private set; }
 
         //½Å±¾
         public PlayerInput input {  get; private set; }
@@ -58,6 +59,11 @@ namespace YuanShenImpactMovementSystem
         private void FixedUpdate()
         {
             movementStateMachine.PhysicsUpdate();
+        }
+
+        public void OnTriggerEnter(Collider collider)
+        {
+            movementStateMachine.OnTriggerEnter(collider);
         }
 
         private void Update()

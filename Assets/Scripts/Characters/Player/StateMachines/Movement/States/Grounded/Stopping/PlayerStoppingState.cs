@@ -35,7 +35,7 @@ namespace YuanShenImpactMovementSystem
             }
 
             //³ÖÐø¼õËÙ
-            DecelerateHorizontally();
+            DecelerateHorizontallyVelocity();
         }
 
         public override void OnAnimationTransitionEvent()

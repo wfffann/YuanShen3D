@@ -13,6 +13,7 @@ namespace YuanShenImpactMovementSystem
         private float startTime;
 
         private bool keepSprinting;//是否保持疾跑
+        private bool shouldResetSpringState;
 
         public PlayerSprintingState(PlayerMovementStateMachine _playerMovementStateMachine) : base(_playerMovementStateMachine)
         {
@@ -28,6 +29,8 @@ namespace YuanShenImpactMovementSystem
             playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = playerSprintData.speedModifier;
 
             playerMovementStateMachine.playerStateReusableData.currentJumpForce = playerAirborneData.playerJumpData.strongForce;
+
+            shouldResetSpringState = true;
            
             //记录当前时间
             startTime = Time.time;
@@ -37,7 +40,11 @@ namespace YuanShenImpactMovementSystem
         {
             base.Exit();
 
-            keepSprinting = false;
+            if (shouldResetSpringState)
+            {
+                keepSprinting = false;
+                playerMovementStateMachine.playerStateReusableData.shouldSprint = false;
+            }
         }
 
         public override void Update()
@@ -100,9 +107,18 @@ namespace YuanShenImpactMovementSystem
             playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerHardStoppingState);
         }
 
+        protected override void OnJumpStarted(InputAction.CallbackContext context)
+        {
+            shouldResetSpringState = false;
+
+            base.OnJumpStarted(context);
+        }
+
         private void OnSprintPerformed(InputAction.CallbackContext context)
         {
             keepSprinting = true;
+
+            playerMovementStateMachine.playerStateReusableData.shouldSprint = true;
         }
         #endregion
     }
