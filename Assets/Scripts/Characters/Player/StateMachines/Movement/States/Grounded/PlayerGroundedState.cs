@@ -189,7 +189,10 @@ namespace YuanShenImpactMovementSystem
             playerMovementStateMachine.player.input.playerActions.Jump.started -= OnJumpStarted;
         }
 
-
+        /// <summary>
+        /// 下方碰撞体离开准备下落状态
+        /// </summary>
+        /// <param name="collider"></param>
         protected override void OnContactWithGroundExited(Collider collider)
         {
             base.OnContactWithGroundExited(collider);

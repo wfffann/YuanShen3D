@@ -8,14 +8,25 @@ namespace YuanShenImpactMovementSystem
     {
         public PlayerStateReusableData playerStateReusableData;
         public Player player { get;}
+
+        //Ground
         public PlayerIdlingState idlingState { get; }
         public PlayerDashingState dashState { get; }
         public PlayerWalkingState walkingState { get; }
         public PlayerRunningState runningState { get; }
         public PlayerSprintingState sprintingState { get; }
+
+
+        public PlayerLightLandingState playerLightLandingState { get; }
+        public PlayerHardLandingState playerHardLandingState { get; }
+        public PlayerRollingState playerRollingState { get; }
+
+        //Stop
         public PlayerLightStoppingState playerLightStoppingState { get; }
-        public PlayerMiddleStoppingState playerMiddleStoppingState { get; }
+        public PlayerMiddleStoppingState playerMediumStoppingState { get; }
         public PlayerHardStoppingState playerHardStoppingState { get; }
+
+        //Airborne
         public PlayerJumpState playerJumpState { get; }
         public PlayerFallingState playerFallingState { get; }
 
@@ -39,12 +50,17 @@ namespace YuanShenImpactMovementSystem
 
             //StoppingState
             playerLightStoppingState = new PlayerLightStoppingState(this);
-            playerMiddleStoppingState = new PlayerMiddleStoppingState(this);
+            playerMediumStoppingState = new PlayerMiddleStoppingState(this);
             playerHardStoppingState = new PlayerHardStoppingState(this);
 
             //AirborneState
             playerJumpState = new PlayerJumpState(this);
             playerFallingState = new PlayerFallingState(this);
+
+            //LandingState
+            playerLightLandingState = new PlayerLightLandingState(this);
+            playerHardLandingState = new PlayerHardLandingState(this);
+            playerRollingState = new PlayerRollingState(this);
         }
     }
 }

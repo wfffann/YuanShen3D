@@ -448,7 +448,8 @@ namespace YuanShenImpactMovementSystem
         /// <param name="context"></param>
         protected virtual void OnWalkToggleStarted(InputAction.CallbackContext context)
         {
-            playerMovementStateMachine.playerStateReusableData.shouldWalk = !playerMovementStateMachine.playerStateReusableData.shouldWalk;
+            playerMovementStateMachine.playerStateReusableData.shouldWalk = 
+                !playerMovementStateMachine.playerStateReusableData.shouldWalk;
         }
 
 

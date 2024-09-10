@@ -28,7 +28,7 @@ namespace YuanShenImpactMovementSystem
         /// <param name="collider"></param>
         protected override void OnContactWithGround(Collider collider)
         {
-            playerMovementStateMachine.ChangeState(playerMovementStateMachine.idlingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerLightLandingState);
         }
 
 

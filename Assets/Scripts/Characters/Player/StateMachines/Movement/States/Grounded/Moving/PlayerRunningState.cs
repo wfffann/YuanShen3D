@@ -68,7 +68,7 @@ namespace YuanShenImpactMovementSystem
         #region Input Methods
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
-            playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerMiddleStoppingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerMediumStoppingState);
         }
 
         /// <summary>

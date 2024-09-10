@@ -17,8 +17,6 @@ namespace YuanShenImpactMovementSystem
         [field: SerializeField] public Vector3 weakForce {  get; private set; }
         [field: SerializeField] public Vector3 mediumForce {  get; private set; }
         [field: SerializeField] public Vector3 strongForce {  get; private set; }
-
         [field: SerializeField][field: Range(0f, 10f)] public float decelerationForce { get; private set; } = 1.5f;
-
     }
 }

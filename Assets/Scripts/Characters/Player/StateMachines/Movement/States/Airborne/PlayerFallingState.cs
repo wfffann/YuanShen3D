@@ -7,6 +7,9 @@ namespace YuanShenImpactMovementSystem
     public class PlayerFallingState : PlayerAirborneState
     {
         private PlayerFallData playerFallData;
+
+        private Vector3 playerPositionOnEnter;
+
         public PlayerFallingState(PlayerMovementStateMachine _playerMovementStateMachine) : base(_playerMovementStateMachine)
         {
             playerFallData = playerAirborneData.playerFallData;
@@ -16,6 +19,8 @@ namespace YuanShenImpactMovementSystem
         public override void Enter()
         {
             base.Enter();
+
+            playerPositionOnEnter = playerMovementStateMachine.player.transform.position;
 
             playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = 0f;
 
@@ -35,6 +40,36 @@ namespace YuanShenImpactMovementSystem
         {
             base.ResetSprintState();
 
+        }
+
+        /// <summary>
+        /// 接触到地面进行翻滚
+        /// </summary>
+        /// <param name="collider"></param>
+        protected override void OnContactWithGround(Collider collider)
+        {
+            float fallDistance = Mathf.Abs(playerPositionOnEnter.y - playerMovementStateMachine.player.transform.position.y);
+
+            //轻着陆
+            if (fallDistance < playerFallData.minimumDistanceToBeConsideredHardFall)
+            {
+                playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerLightLandingState);
+
+                return;
+            }
+
+            //重着陆
+            if(playerMovementStateMachine.playerStateReusableData.shouldWalk && 
+                !playerMovementStateMachine.playerStateReusableData.shouldSprint || 
+                playerMovementStateMachine.playerStateReusableData.movementInput == Vector2.zero)
+            {
+                playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerHardLandingState);
+
+                return;
+            }
+
+            //翻滚
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerRollingState);
         }
         #endregion
 
