@@ -9,5 +9,6 @@ namespace YuanShenImpactMovementSystem
     public class PlayerAirborneData
     {
         [field:SerializeField] public PlayerJumpData playerJumpData {  get; private set; } 
+        [field:SerializeField] public PlayerFallData playerFallData {  get; private set; } 
     }
 }

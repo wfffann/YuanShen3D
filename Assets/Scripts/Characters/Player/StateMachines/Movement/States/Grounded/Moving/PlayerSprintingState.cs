@@ -68,7 +68,7 @@ namespace YuanShenImpactMovementSystem
         }
         #endregion
 
-        #region
+        #region Main Methods
         /// <summary>
         /// Í£Ö¹¼²ÅÜ×´Ì¬
         /// </summary>
@@ -98,6 +98,12 @@ namespace YuanShenImpactMovementSystem
             base.RemoveInputActionsCallback();
 
             playerMovementStateMachine.player.input.playerActions.Sprint.performed -= OnSprintPerformed;
+        }
+
+        protected override void OnFall()
+        {
+            shouldResetSpringState = false;
+            base.OnFall();
         }
         #endregion
 

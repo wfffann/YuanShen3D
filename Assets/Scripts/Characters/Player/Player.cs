@@ -13,7 +13,7 @@ namespace YuanShenImpactMovementSystem
         [field: SerializeField] public PlayerSO playerData {  get; private set; }
 
         [field: Header("Collisions")]
-        [field: SerializeField] public CapsulColliderUtility colliderUtility { get; private set; }
+        [field: SerializeField] public PlayerCapsuleColliderUtility colliderUtility { get; private set; }
         [field: SerializeField] public PlayerLayerData playerLayerData { get; private set; }
 
         //½Å±¾
@@ -64,6 +64,11 @@ namespace YuanShenImpactMovementSystem
         public void OnTriggerEnter(Collider collider)
         {
             movementStateMachine.OnTriggerEnter(collider);
+        }
+
+        public void OnTriggerExit(Collider collider)
+        {
+            movementStateMachine.OnTriggerExit(collider);
         }
 
         private void Update()

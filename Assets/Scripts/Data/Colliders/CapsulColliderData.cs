@@ -10,6 +10,8 @@ namespace YuanShenImpactMovementSystem
 
         public Vector3 colliderCenterInLocalSpace {  get; private set; }//碰撞体的中心
 
+        public Vector3 colliderVerticalExtents { get; private set; }
+
         /// <summary>
         /// 碰撞体初始化
         /// </summary>
@@ -33,6 +35,8 @@ namespace YuanShenImpactMovementSystem
         public void UpdateColliderData()
         {
             colliderCenterInLocalSpace = collider.center;
+
+            colliderVerticalExtents = new Vector3(0f, collider.bounds.extents.y, 0f);//一半的Height
         }
     }
 }

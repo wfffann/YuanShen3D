@@ -5202,6 +5202,8 @@ MonoBehaviour:
       <stepHeightPercentage>k__BackingField: 0.25
       <FloatRayDistance>k__BackingField: 2
       <stepReachForce>k__BackingField: 25
+    <triggerColliderData>k__BackingField:
+      <groundCheckCollider>k__BackingField: {fileID: 547825348}
   <playerLayerData>k__BackingField:
     <groundLayer>k__BackingField:
       serializedVersion: 2

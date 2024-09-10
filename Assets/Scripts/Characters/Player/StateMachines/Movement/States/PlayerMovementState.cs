@@ -87,6 +87,15 @@ namespace YuanShenImpactMovementSystem
             }
         }
 
+        public void OnTriggerExit(Collider collider)
+        {
+            if (playerMovementStateMachine.player.playerLayerData.IsGroundLayer(collider.gameObject.layer))
+            {
+                OnContactWithGroundExited(collider);
+
+                return;
+            }
+        }
         #endregion
 
         #region Main Methods
@@ -104,6 +113,7 @@ namespace YuanShenImpactMovementSystem
         /// </summary>
         private void Move()
         {
+            //移动输入为0或者速度调节器为0，直接返回不移动（jump会改变
             if(playerMovementStateMachine.playerStateReusableData.movementInput == Vector2.zero || playerMovementStateMachine.playerStateReusableData.movementSpeedModifier == 0f)
             {
                 return;
@@ -197,6 +207,21 @@ namespace YuanShenImpactMovementSystem
         #endregion
 
         #region Reusable Methods
+        /// <summary>
+        /// 添加按下一次的操作回调
+        /// </summary>
+        protected virtual void AddInputActionsCallback()
+        {
+            playerMovementStateMachine.player.input.playerActions.WalkToggle.started += OnWalkToggleStarted;
+        }
+
+        /// <summary>
+        /// 删除按下一次的操作的回调
+        /// </summary>
+        protected virtual void RemoveInputActionsCallback()
+        {
+            playerMovementStateMachine.player.input.playerActions.WalkToggle.started -= OnWalkToggleStarted;
+        }
 
         /// <summary>
         /// 获取移动输入的向量
@@ -315,21 +340,14 @@ namespace YuanShenImpactMovementSystem
             playerMovementStateMachine.player.rb.velocity = Vector3.zero;
         }
 
-        /// <summary>
-        /// 添加按下一次的操作回调
-        /// </summary>
-        protected virtual void AddInputActionsCallback()
+
+        protected void ResetVerticalVelocity()
         {
-            playerMovementStateMachine.player.input.playerActions.WalkToggle.started += OnWalkToggleStarted;
+            Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();//返回的速度y轴为0
+
+            playerMovementStateMachine.player.rb.velocity = playerHorizontalVelocity;
         }
 
-        /// <summary>
-        /// 删除按下一次的操作的回调
-        /// </summary>
-        protected virtual void RemoveInputActionsCallback()
-        {
-            playerMovementStateMachine.player.input.playerActions.WalkToggle.started -= OnWalkToggleStarted;
-        }
 
         /// <summary>
         /// 水平方向的减速
@@ -412,6 +430,15 @@ namespace YuanShenImpactMovementSystem
             
         }
 
+        /// <summary>
+        /// 离开地面后
+        /// </summary>
+        /// <param name="collider"></param>
+        protected virtual void OnContactWithGroundExited(Collider collider)
+        {
+
+        }
+
         #endregion
 
         #region Input Methods
@@ -423,8 +450,6 @@ namespace YuanShenImpactMovementSystem
         {
             playerMovementStateMachine.playerStateReusableData.shouldWalk = !playerMovementStateMachine.playerStateReusableData.shouldWalk;
         }
-
-
 
 
         #endregion

@@ -9,6 +9,7 @@ namespace YuanShenImpactMovementSystem
     {
         private PlayerJumpData playerJumpData;
         private bool shouldKeepRotating;
+        private bool canStartFalling;
 
         public PlayerJumpState(PlayerMovementStateMachine _playerMovementStateMachine) : base(_playerMovementStateMachine)
         {
@@ -36,6 +37,8 @@ namespace YuanShenImpactMovementSystem
             base.Exit();
 
             SetBaseRotationData();
+
+            canStartFalling = false;
         }
 
         public override void PhysicsUpdate()
@@ -52,14 +55,32 @@ namespace YuanShenImpactMovementSystem
                 DecelerateVerticalVelocity();
             }
         }
+
+        public override void Update()
+        {
+            base.Update();
+
+            //上升状态(前置条件
+            if(!canStartFalling && IsMovingUp(0f))
+            {
+                canStartFalling = true;
+            }
+
+            //等待速度 < 0
+            if(!canStartFalling || GetPlayerVerticalVelocity().y > 0)
+            {
+                return;
+            }
+
+            //Y轴速度 < 0
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerFallingState);
+        }
         #endregion
 
         #region Reusable Methods
         protected override void ResetSprintState()
         {
-            base.ResetSprintState();
-
-
+           
         }
         #endregion
 

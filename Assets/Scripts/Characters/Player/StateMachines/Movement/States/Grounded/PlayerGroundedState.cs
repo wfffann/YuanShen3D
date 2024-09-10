@@ -23,8 +23,6 @@ namespace YuanShenImpactMovementSystem
             UpdateShouldSpringState();
         }
 
-       
-
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
@@ -117,6 +115,28 @@ namespace YuanShenImpactMovementSystem
 
             playerMovementStateMachine.playerStateReusableData.shouldSprint = false;
         }
+
+        /// <summary>
+        /// 在碰撞体内检测是否有物体
+        /// </summary>
+        /// <returns></returns>
+        private bool IsThereGroundUnderneath()
+        {
+            //碰撞体
+            BoxCollider groundCheckCollider = playerMovementStateMachine.player.colliderUtility.triggerColliderData.groundCheckCollider;
+
+            //碰撞体中心点
+            Vector3 groundColliderCenterInWorldSpace = groundCheckCollider.bounds.center;
+
+            //返回碰撞体碰撞的物体
+            Collider[] overlappedGroundColliders = Physics.OverlapBox(groundColliderCenterInWorldSpace,
+                groundCheckCollider.bounds.center, 
+                groundCheckCollider.transform.rotation, 
+                playerMovementStateMachine.player.playerLayerData.groundLayer,
+                QueryTriggerInteraction.Ignore);
+
+            return overlappedGroundColliders.Length > 0;
+        }
         #endregion
 
         #region  Reusable Methods
@@ -167,6 +187,45 @@ namespace YuanShenImpactMovementSystem
             playerMovementStateMachine.player.input.playerActions.Dash.started -= OnDashStarted;
 
             playerMovementStateMachine.player.input.playerActions.Jump.started -= OnJumpStarted;
+        }
+
+
+        protected override void OnContactWithGroundExited(Collider collider)
+        {
+            base.OnContactWithGroundExited(collider);
+
+            //下方groundCheck碰撞体内是否有物体
+            if (IsThereGroundUnderneath())
+            {
+                return;
+            }
+
+            Vector3 capsuleColliderCenterInWorldSpace = 
+                playerMovementStateMachine.player.colliderUtility.capsulColliderData.collider.bounds.center;
+
+            //胶囊碰撞体的底部位置向下发射出射线
+            Ray downwardsRayFromCapsuleBottom = new Ray(capsuleColliderCenterInWorldSpace - 
+                playerMovementStateMachine.player.colliderUtility.capsulColliderData.colliderVerticalExtents, 
+                Vector3.down);
+
+            //在短距离的射线检测下没有物体，那么执行下落的状态
+            if(!Physics.Raycast(downwardsRayFromCapsuleBottom,
+                out _, 
+                playerGroundedMovementData.groundToFallRayDistance, 
+                playerMovementStateMachine.player.playerLayerData.groundLayer, 
+                QueryTriggerInteraction.Ignore))
+            {
+                //下落状态
+                OnFall();
+            }
+        }
+
+        /// <summary>
+        /// 下落
+        /// </summary>
+        protected virtual void OnFall()
+        {
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerFallingState);
         }
 
         #endregion
