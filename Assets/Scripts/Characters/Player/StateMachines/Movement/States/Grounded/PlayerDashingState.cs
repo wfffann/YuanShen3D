@@ -24,18 +24,18 @@ namespace YuanShenImpactMovementSystem
         #region IState Methods
         public override void Enter()
         {
-            base.Enter();
-
             //速度修改器
-            playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = 
+            playerMovementStateMachine.playerStateReusableData.movementSpeedModifier =
                 playerGroundedMovementData.playerDashData.speedModifier;
+
+            base.Enter();
 
             playerMovementStateMachine.playerStateReusableData.currentJumpForce = 
                 playerAirborneData.playerJumpData.strongForce;
 
             playerMovementStateMachine.playerStateReusableData.RotationData = playerDashData.rotationData;
 
-            AddForceOnTransitionFromStationaryState();
+            Dash();
 
             //进入Dashing冲刺状态时是否有移动输入
             shouldKeepRotating = playerMovementStateMachine.playerStateReusableData.movementInput != Vector2.zero;
@@ -89,23 +89,25 @@ namespace YuanShenImpactMovementSystem
         /// <summary>
         /// 冲刺状态增加的速度
         /// </summary>
-        private void AddForceOnTransitionFromStationaryState()
+        private void Dash()
         {
-            //如果此时有移动的输入
-            if(playerMovementStateMachine.playerStateReusableData.movementInput != Vector2.zero)
-            {
-                return;
-            }
+            Vector3 dashDirection = playerMovementStateMachine.player.transform.forward;
 
-            Vector3 characterRotationDirection = playerMovementStateMachine.player.transform.forward;
-
-            characterRotationDirection.y = 0f;
+            dashDirection.y = 0f;
 
             //在旋转的时候冲刺，那么会在进入的时候（没有移动输入）旋转到其他正前方的朝向(不考虑相机的移动角度
-            UpdateTargetRotation(characterRotationDirection, false);
+            UpdateTargetRotation(dashDirection, false);
+
+            //如果此时有移动的输入
+            if (playerMovementStateMachine.playerStateReusableData.movementInput != Vector2.zero)
+            {
+                UpdateTargetRotation(GetMovementInputDirection());
+
+                dashDirection = GetTargetRotationDirection(playerMovementStateMachine.playerStateReusableData.CurrentTargetRotation.y);
+            }
 
             //冲刺时的移动速度
-            playerMovementStateMachine.player.rb.velocity = characterRotationDirection * GetMovementSpeed();
+            playerMovementStateMachine.player.rb.velocity = dashDirection * GetMovementSpeed(false);
         }
 
         /// <summary>
@@ -166,11 +168,11 @@ namespace YuanShenImpactMovementSystem
             shouldKeepRotating = true;
         }
 
-        protected override void OnMovementCanceled(InputAction.CallbackContext context)
-        {
-            //此函数已被清空，目的是防止在冲刺状态下没有移动速度立马变为IdleState
-            //此函数的作用被冲刺状态的动画帧Event同理替换
-        }
+        //protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        //{
+        //    //此函数已被清空，目的是防止在冲刺状态下没有移动速度立马变为IdleState
+        //    //此函数的作用被冲刺状态的动画帧Event同理替换
+        //}
 
         protected override void OnDashStarted(InputAction.CallbackContext context)
         {

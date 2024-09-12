@@ -14,6 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <playerGroundedData>k__BackingField:
     <BaseSpeed>k__BackingField: 5
+    <groundToFallRayDistance>k__BackingField: 0.5
+    <sidewaysCameraRecenteringData>k__BackingField:
+    - <minimumAngle>k__BackingField: 0
+      <maximumAngle>k__BackingField: 80
+      <waitTime>k__BackingField: -1
+      <recenteringTime>k__BackingField: -1
+    - <minimumAngle>k__BackingField: 80
+      <maximumAngle>k__BackingField: 90
+      <waitTime>k__BackingField: 0
+      <recenteringTime>k__BackingField: 0.3
+    <backwardsCameraRecenteringData>k__BackingField:
+    - <minimumAngle>k__BackingField: 80
+      <maximumAngle>k__BackingField: 90
+      <waitTime>k__BackingField: 0
+      <recenteringTime>k__BackingField: 0.5
     <slopeSpeedAngleCurve>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -85,8 +100,19 @@ MonoBehaviour:
       m_RotationOrder: 4
     <baseRotationData>k__BackingField:
       <targetRotationReachTime>k__BackingField: {x: 0, y: 0.14, z: 0}
+    <playerIdleData>k__BackingField:
+      <backwardsCameraRecenteringData>k__BackingField:
+      - <minimumAngle>k__BackingField: 80
+        <maximumAngle>k__BackingField: 90
+        <waitTime>k__BackingField: 0.25
+        <recenteringTime>k__BackingField: 0.5
     <playerWalkData>k__BackingField:
       <speedModifier>k__BackingField: 0.225
+      <backwardsCameraRecenteringData>k__BackingField:
+      - <minimumAngle>k__BackingField: 80
+        <maximumAngle>k__BackingField: 90
+        <waitTime>k__BackingField: -1
+        <recenteringTime>k__BackingField: -1
     <playerRunningData>k__BackingField:
       <speedModifier>k__BackingField: 1
     <playerDashData>k__BackingField:
@@ -104,6 +130,8 @@ MonoBehaviour:
       <lightDecelerationForce>k__BackingField: 5
       <mediumDecelerationForce>k__BackingField: 6.5
       <hardDecelerationForce>k__BackingField: 8
+    <playerRollData>k__BackingField:
+      <speedModifier>k__BackingField: 1
   <playerAirborneData>k__BackingField:
     <playerJumpData>k__BackingField:
       <playerRotationData>k__BackingField:
@@ -224,3 +252,7 @@ MonoBehaviour:
       <weakForce>k__BackingField: {x: 1, y: 5, z: 1}
       <mediumForce>k__BackingField: {x: 3.5, y: 5, z: 3.5}
       <strongForce>k__BackingField: {x: 5, y: 5, z: 5}
+      <decelerationForce>k__BackingField: 1.5
+    <playerFallData>k__BackingField:
+      <fallSpeedLimit>k__BackingField: 15
+      <minimumDistanceToBeConsideredHardFall>k__BackingField: 3

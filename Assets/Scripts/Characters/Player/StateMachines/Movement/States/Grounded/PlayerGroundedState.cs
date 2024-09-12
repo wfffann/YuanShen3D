@@ -21,6 +21,8 @@ namespace YuanShenImpactMovementSystem
             base.Enter();
 
             UpdateShouldSpringState();
+
+            UpdateCameraRecenteringState(playerMovementStateMachine.playerStateReusableData.movementInput);
         }
 
         public override void PhysicsUpdate()
@@ -91,7 +93,11 @@ namespace YuanShenImpactMovementSystem
         {
             float slopeSpeedModifier = playerGroundedMovementData.slopeSpeedAngleCurve.Evaluate(groundAngle);
 
-            playerMovementStateMachine.playerStateReusableData.movementOnSlopeSpeedModifier = slopeSpeedModifier;
+            if(playerMovementStateMachine.playerStateReusableData.movementOnSlopeSpeedModifier != slopeSpeedModifier)
+            {
+                playerMovementStateMachine.playerStateReusableData.movementOnSlopeSpeedModifier = slopeSpeedModifier;
+                UpdateCameraRecenteringState(playerMovementStateMachine.playerStateReusableData.movementInput);
+            }
 
             return slopeSpeedModifier;
         }
@@ -130,7 +136,7 @@ namespace YuanShenImpactMovementSystem
 
             //返回碰撞体碰撞的物体
             Collider[] overlappedGroundColliders = Physics.OverlapBox(groundColliderCenterInWorldSpace,
-                groundCheckCollider.bounds.center, 
+                playerMovementStateMachine.player.colliderUtility.triggerColliderData.groundCheckColliderExtents, 
                 groundCheckCollider.transform.rotation, 
                 playerMovementStateMachine.player.playerLayerData.groundLayer,
                 QueryTriggerInteraction.Ignore);
@@ -170,7 +176,7 @@ namespace YuanShenImpactMovementSystem
         {
             base.AddInputActionsCallback();
 
-            playerMovementStateMachine.player.input.playerActions.Movement.canceled += OnMovementCanceled;
+            //playerMovementStateMachine.player.input.playerActions.Movement.canceled += OnMovementCanceled;
 
             playerMovementStateMachine.player.input.playerActions.Dash.started += OnDashStarted;
 
@@ -182,7 +188,7 @@ namespace YuanShenImpactMovementSystem
         {
             base.RemoveInputActionsCallback();
 
-            playerMovementStateMachine.player.input.playerActions.Movement.canceled -= OnMovementCanceled;
+            //playerMovementStateMachine.player.input.playerActions.Movement.canceled -= OnMovementCanceled;
 
             playerMovementStateMachine.player.input.playerActions.Dash.started -= OnDashStarted;
 
@@ -238,10 +244,10 @@ namespace YuanShenImpactMovementSystem
         /// 没有移动向量的输入
         /// </summary>
         /// <param name="context"></param>
-        protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
-        {
-            playerMovementStateMachine.ChangeState(playerMovementStateMachine.idlingState);
-        }
+        //protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
+        //{
+        //    playerMovementStateMachine.ChangeState(playerMovementStateMachine.idlingState);
+        //}
 
         /// <summary>
         /// 触发一次冲刺

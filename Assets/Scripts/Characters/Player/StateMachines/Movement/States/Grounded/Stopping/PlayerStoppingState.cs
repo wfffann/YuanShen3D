@@ -16,9 +16,11 @@ namespace YuanShenImpactMovementSystem
         #region IState Methods
         public override void Enter()
         {
-            base.Enter();
-
             playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = 0f;
+
+            SetBaseCameraRecenteringData();
+
+            base.Enter();
         }
 
         public override void PhysicsUpdate()
@@ -61,10 +63,10 @@ namespace YuanShenImpactMovementSystem
         #endregion
 
         #region Input Methods
-        protected override void OnMovementCanceled(InputAction.CallbackContext context)
-        {
+        //protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        //{
             
-        }
+        //}
 
         /// <summary>
         /// 在stopping状态下的状态过渡到Moving系列状态

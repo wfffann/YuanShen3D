@@ -13,6 +13,10 @@ namespace YuanShenImpactMovementSystem
         public float movementSpeedModifier { get; set; } = 1f;
         public float movementOnSlopeSpeedModifier { get; set; } = 1f;
         public float movementDecelerationForce { get; set; } = 1f;
+
+        public List<PlayerCameraRecenteringData> sidewaysCameraRecenteringData { get; set; }
+        public List<PlayerCameraRecenteringData> backwardsCameraRecenteringData { get; set; }
+
         public bool shouldWalk {  get; set; }
         public bool shouldSprint {  get; set; }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace YuanShenImpactMovementSystem
 {
@@ -97,6 +98,8 @@ namespace YuanShenImpactMovementSystem
             //如果在进入Jump跳跃状态前有移动输入那么就朝这个进入时的向量跳跃，否则直接向前面跳跃
             if (shouldKeepRotating)
             {
+                UpdateTargetRotation(GetMovementInputDirection());
+
                 //获取旋转之后的向量
                 jumpDirection = GetTargetRotationDirection(playerMovementStateMachine.playerStateReusableData.CurrentTargetRotation.y);
             }
@@ -138,6 +141,13 @@ namespace YuanShenImpactMovementSystem
             ResetVelocity();
 
             playerMovementStateMachine.player.rb.AddForce(jumpForce, ForceMode.VelocityChange);
+        }
+        #endregion
+
+        #region Input Methods
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+            
         }
         #endregion
     }

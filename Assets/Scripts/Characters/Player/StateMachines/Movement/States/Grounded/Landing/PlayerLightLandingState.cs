@@ -14,12 +14,25 @@ namespace YuanShenImpactMovementSystem
         #region IState Methods
         public override void Enter()
         {
-            base.Enter();
-
             playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = 0f;
+
+            base.Enter();
 
             playerMovementStateMachine.playerStateReusableData.currentJumpForce = playerAirborneData.playerJumpData.stationaryForce;
 
+            ResetVelocity();
+        }
+
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+
+            if (!IsMovingHorizontally())
+            {
+                return;
+            }
+
+            //垂直移动则重置速度
             ResetVelocity();
         }
 

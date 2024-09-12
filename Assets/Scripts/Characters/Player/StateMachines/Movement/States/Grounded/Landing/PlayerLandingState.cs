@@ -17,10 +17,10 @@ namespace YuanShenImpactMovementSystem
         #endregion
 
         #region Input Methods
-        protected override void OnMovementCanceled(InputAction.CallbackContext context)
-        {
+        //protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        //{
             
-        }
+        //}
         #endregion
     }
 }

@@ -10,8 +10,11 @@ namespace YuanShenImpactMovementSystem
     {
         [field: SerializeField] [field: Range(0f, 25f)]  public float BaseSpeed { get; private set; } = 5f;
         [field: SerializeField] [field: Range(0f, 5f)]  public float groundToFallRayDistance { get; private set; } = 0.5f;
+        [field: SerializeField] public List<PlayerCameraRecenteringData> sidewaysCameraRecenteringData { get; private set; }
+        [field: SerializeField] public List<PlayerCameraRecenteringData> backwardsCameraRecenteringData { get; private set; }
         [field: SerializeField] public AnimationCurve slopeSpeedAngleCurve { get; private set; }
         [field: SerializeField] public PlayerRotationData baseRotationData { get; private set; }
+        [field: SerializeField] public PlayerIdleData playerIdleData { get; private set; }
         [field: SerializeField] public PlayerWalkData playerWalkData { get; private set; }
         [field: SerializeField] public PlayerRunningData playerRunningData { get; private set; }
         [field: SerializeField] public PlayerDashData playerDashData { get; private set; }

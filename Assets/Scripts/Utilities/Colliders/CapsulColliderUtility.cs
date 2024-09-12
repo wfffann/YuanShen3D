@@ -26,6 +26,13 @@ namespace YuanShenImpactMovementSystem
             capsulColliderData = new CapsulColliderData();
 
             capsulColliderData.Initialize(gameObject);
+
+            OnInitialize();
+        }
+
+        protected virtual void OnInitialize()
+        {
+
         }
 
         /// <summary>

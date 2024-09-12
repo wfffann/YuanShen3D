@@ -16,6 +16,9 @@ namespace YuanShenImpactMovementSystem
         [field: SerializeField] public PlayerCapsuleColliderUtility colliderUtility { get; private set; }
         [field: SerializeField] public PlayerLayerData playerLayerData { get; private set; }
 
+        [field: Header("Camera")]
+        [field: SerializeField] public PlayerCameraUtility playerCameraUtility { get; private set; }
+
         //脚本
         public PlayerInput input {  get; private set; }
 
@@ -35,6 +38,8 @@ namespace YuanShenImpactMovementSystem
 
             //获取当前碰撞体的数据
             colliderUtility.CalculateCapsuleColliderDimensions();
+
+            playerCameraUtility.Initialize();
 
             mainCameraTransform = Camera.main.transform;
 

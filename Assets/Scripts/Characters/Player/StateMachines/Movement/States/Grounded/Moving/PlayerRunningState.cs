@@ -19,9 +19,9 @@ namespace YuanShenImpactMovementSystem
         #region IState Methods
         public override void Enter()
         {
-            base.Enter();
-
             playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = playerGroundedMovementData.playerRunningData.speedModifier;
+
+            base.Enter();
 
             playerMovementStateMachine.playerStateReusableData.currentJumpForce = playerAirborneData.playerJumpData.mediumForce;
 
@@ -69,6 +69,8 @@ namespace YuanShenImpactMovementSystem
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
             playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerMediumStoppingState);
+
+            base.OnMovementCanceled(context);
         }
 
         /// <summary>

@@ -16,9 +16,9 @@ namespace YuanShenImpactMovementSystem
         #region IState Methods
         public override void Enter()
         {
-            base.Enter();
-
             playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = playerRollData.speedModifier;
+
+            base.Enter();
 
             playerMovementStateMachine.playerStateReusableData.shouldSprint = false;
         }

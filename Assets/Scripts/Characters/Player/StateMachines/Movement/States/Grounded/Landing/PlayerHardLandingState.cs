@@ -16,12 +16,12 @@ namespace YuanShenImpactMovementSystem
         #region IState Methods
         public override void Enter()
         {
+            playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = 0f;
+
             base.Enter();
 
             //关闭移动按键输入
             playerMovementStateMachine.player.input.playerActions.Movement.Disable();
-
-            playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = 0f;
 
             ResetVelocity();
         }
@@ -31,6 +31,19 @@ namespace YuanShenImpactMovementSystem
             base.Exit();
 
             playerMovementStateMachine.player.input.playerActions.Movement.Enable();
+        }
+
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+
+            if (!IsMovingHorizontally())
+            {
+                return;
+            }
+
+            //垂直移动则重置速度
+            ResetVelocity();
         }
 
         public override void OnAnimationExitEvent()

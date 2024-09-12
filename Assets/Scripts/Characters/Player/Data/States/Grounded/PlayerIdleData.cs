@@ -6,10 +6,8 @@ using UnityEngine;
 namespace YuanShenImpactMovementSystem
 {
     [Serializable]
-    public class PlayerWalkData
+    public class PlayerIdleData
     {
-        [field: SerializeField][field: Range(0f, 1f)] public float speedModifier { get; private set; } = 0.225f;
-
         [field: SerializeField] public List<PlayerCameraRecenteringData> backwardsCameraRecenteringData { get; private set; }
     }
 }

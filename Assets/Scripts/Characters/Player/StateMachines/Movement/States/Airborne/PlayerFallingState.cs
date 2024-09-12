@@ -48,7 +48,7 @@ namespace YuanShenImpactMovementSystem
         /// <param name="collider"></param>
         protected override void OnContactWithGround(Collider collider)
         {
-            float fallDistance = Mathf.Abs(playerPositionOnEnter.y - playerMovementStateMachine.player.transform.position.y);
+            float fallDistance = playerPositionOnEnter.y - playerMovementStateMachine.player.transform.position.y;
 
             //Çá×ÅÂ½
             if (fallDistance < playerFallData.minimumDistanceToBeConsideredHardFall)

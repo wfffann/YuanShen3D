@@ -23,10 +23,10 @@ namespace YuanShenImpactMovementSystem
         #region IState Methods
         public override void Enter()
         {
-            base.Enter();
-
             //修改速度调节器
             playerMovementStateMachine.playerStateReusableData.movementSpeedModifier = playerSprintData.speedModifier;
+
+            base.Enter();
 
             playerMovementStateMachine.playerStateReusableData.currentJumpForce = playerAirborneData.playerJumpData.strongForce;
 
@@ -111,6 +111,8 @@ namespace YuanShenImpactMovementSystem
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
             playerMovementStateMachine.ChangeState(playerMovementStateMachine.playerHardStoppingState);
+
+            base.OnMovementCanceled(context);
         }
 
         protected override void OnJumpStarted(InputAction.CallbackContext context)

@@ -21,6 +21,8 @@ namespace YuanShenImpactMovementSystem
             playerGroundedMovementData = playerMovementStateMachine.player.playerData.playerGroundedData;
             playerAirborneData = playerMovementStateMachine.player.playerData.playerAirborneData;
 
+            SetBaseCameraRecenteringData();
+
             InitializaData();
         }
 
@@ -213,6 +215,12 @@ namespace YuanShenImpactMovementSystem
         protected virtual void AddInputActionsCallback()
         {
             playerMovementStateMachine.player.input.playerActions.WalkToggle.started += OnWalkToggleStarted;
+
+            playerMovementStateMachine.player.input.playerActions.Look.started += OnMouseMovementStarted;
+
+            playerMovementStateMachine.player.input.playerActions.Movement.performed += OnMovementPerformed;
+
+            playerMovementStateMachine.player.input.playerActions.Movement.canceled += OnMovementCanceled;
         }
 
         /// <summary>
@@ -221,6 +229,20 @@ namespace YuanShenImpactMovementSystem
         protected virtual void RemoveInputActionsCallback()
         {
             playerMovementStateMachine.player.input.playerActions.WalkToggle.started -= OnWalkToggleStarted;
+
+            playerMovementStateMachine.player.input.playerActions.Look.started -= OnMouseMovementStarted;
+
+            playerMovementStateMachine.player.input.playerActions.Movement.performed -= OnMovementPerformed;
+
+            playerMovementStateMachine.player.input.playerActions.Movement.canceled -= OnMovementCanceled;
+        }
+
+        protected void SetBaseCameraRecenteringData()
+        {
+            playerMovementStateMachine.playerStateReusableData.backwardsCameraRecenteringData =
+                playerGroundedMovementData.backwardsCameraRecenteringData;
+            playerMovementStateMachine.playerStateReusableData.sidewaysCameraRecenteringData =
+                playerGroundedMovementData.sidewaysCameraRecenteringData;
         }
 
         /// <summary>
@@ -236,11 +258,16 @@ namespace YuanShenImpactMovementSystem
         /// 获取移动速度
         /// </summary>
         /// <returns></returns>
-        protected float GetMovementSpeed()
+        protected float GetMovementSpeed(bool shouldConsiderSlopes = true)
         {
-            return playerGroundedMovementData.BaseSpeed * 
-                playerMovementStateMachine.playerStateReusableData.movementSpeedModifier * 
-                playerMovementStateMachine.playerStateReusableData.movementOnSlopeSpeedModifier;
+            float movementSpeed = playerGroundedMovementData.BaseSpeed * playerMovementStateMachine.playerStateReusableData.movementSpeedModifier;
+
+            if (shouldConsiderSlopes)
+            {
+                movementSpeed *= playerMovementStateMachine.playerStateReusableData.movementOnSlopeSpeedModifier;
+            }
+
+            return movementSpeed;
         }
 
         /// <summary>
@@ -341,13 +368,15 @@ namespace YuanShenImpactMovementSystem
         }
 
 
+        /// <summary>
+        /// 重置玩家的垂直速度为0
+        /// </summary>
         protected void ResetVerticalVelocity()
         {
             Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();//返回的速度y轴为0
 
             playerMovementStateMachine.player.rb.velocity = playerHorizontalVelocity;
         }
-
 
         /// <summary>
         /// 水平方向的减速
@@ -439,6 +468,94 @@ namespace YuanShenImpactMovementSystem
 
         }
 
+        /// <summary>
+        /// 更新相机水平居中的状态
+        /// </summary>
+        /// <param name="movementInput"></param>
+        protected void UpdateCameraRecenteringState(Vector2 movementInput)
+        {
+            //没有移动输入时
+            if(movementInput == Vector2.zero)
+            {
+                return;
+            }
+
+            //向前移动时，禁用
+            if(movementInput == Vector2.up)
+            {
+                DisableCameraRecentering();
+
+                return;
+            }
+
+            //获取相机垂直角度 
+            float cameraVerticalAngle = playerMovementStateMachine.player.mainCameraTransform.eulerAngles.x;
+
+            if(cameraVerticalAngle >= 270f)
+            {
+                cameraVerticalAngle -= 360f;
+            }
+
+            cameraVerticalAngle = Mathf.Abs(cameraVerticalAngle);
+
+            //向后移动时
+            if(movementInput == Vector2.down)
+            {
+                SetCameraRecenteringState(cameraVerticalAngle, playerMovementStateMachine.playerStateReusableData.backwardsCameraRecenteringData);
+
+                return;
+            }
+
+            SetCameraRecenteringState(cameraVerticalAngle, playerMovementStateMachine.playerStateReusableData.backwardsCameraRecenteringData);
+        }
+
+        /// <summary>
+        /// 打开相机水平居中
+        /// </summary>
+        /// <param name="waitTime"></param>
+        /// <param name="recenteringTime"></param>
+        protected void EnableCameraRecentering(float waitTime = -1f, float recenteringTime = 1f)
+        {
+            float movementSpeed = GetMovementSpeed();
+
+            if (movementSpeed == 0f)
+            {
+                movementSpeed = playerGroundedMovementData.BaseSpeed;
+            }
+
+            playerMovementStateMachine.player.playerCameraUtility.EnableRecentering(waitTime, recenteringTime, 
+                playerGroundedMovementData.BaseSpeed, movementSpeed);
+        }
+
+        /// <summary>
+        /// 关闭相机水平居中
+        /// </summary>
+        protected void DisableCameraRecentering()
+        {
+            playerMovementStateMachine.player.playerCameraUtility.DisableRecentering();
+        }
+
+        /// <summary>
+        /// 设置相机重新居中
+        /// </summary>
+        /// <param name="cameraVerticalAngle"></param>
+        protected void SetCameraRecenteringState(float cameraVerticalAngle, List<PlayerCameraRecenteringData> backwardsCameraRecenteringData)
+        {
+            foreach (PlayerCameraRecenteringData recenteringData in backwardsCameraRecenteringData)
+            {
+                if (!recenteringData.isWithinRange(cameraVerticalAngle))
+                {
+                    continue;
+                }
+
+                EnableCameraRecentering(recenteringData.waitTime, recenteringData.recenteringTime);
+
+                return;
+            }
+
+            DisableCameraRecentering();
+        }
+
         #endregion
 
         #region Input Methods
@@ -452,6 +569,21 @@ namespace YuanShenImpactMovementSystem
                 !playerMovementStateMachine.playerStateReusableData.shouldWalk;
         }
 
+        protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+            //禁止相机水平移动
+            DisableCameraRecentering();
+        }
+
+        private void OnMouseMovementStarted(InputAction.CallbackContext context)
+        {
+            UpdateCameraRecenteringState(playerMovementStateMachine.playerStateReusableData.movementInput);
+        }
+
+        private void OnMovementPerformed(InputAction.CallbackContext context)
+        {
+            UpdateCameraRecenteringState(context.ReadValue<Vector2>());
+        }
 
         #endregion
     }
